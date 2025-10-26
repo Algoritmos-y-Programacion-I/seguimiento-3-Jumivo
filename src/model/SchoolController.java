@@ -1,37 +1,56 @@
 package model;
 
+import java.util.ArrayList;
+import java.time.LocalDate;
+
 public class SchoolController {
 
-    /*
-     * ATENCION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-     * Agregue los atributos (relaciones) necesarios para satisfacer los
-     * requerimientos.
-     */
+    private ArrayList<Computer> computers;
 
     public SchoolController() {
-
+        computers = new ArrayList<Computer>();
     }
 
-    /*
-     * ATENCION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-     * Los siguientes metodos estan incompletos.
-     * Añada los metodos que considere hagan falta para satisfacer los
-     * requerimientos.
-     * Para cada metodo:
-     * Agregue los parametros y retorno que sean pertinentes.
-     * Agregue la logica necesaria (instrucciones) para satisfacer los
-     * requerimientos.
-     */
-    public void agregarComputador() {
-
+    public void agregarComputador(String serialNumber, int floor, int column) {
+        Computer compu = new Computer(serialNumber, floor, column);
+        computers.add(compu);
     }
 
-    public void agregarIncidenteEnComputador() {
+    public void agregarIncidenteEnComputador(String serialNumber, String description) {
+        for (int i = 0; i < computers.size(); i++) {
+            Computer c = computers.get(i);
 
+            if (c.getSerialNumber().equals(serialNumber)) {
+                Incident nuevo = new Incident(LocalDate.now(), description);
+                c.addIncident(nuevo);
+            }
+        }
     }
 
     public void getComputerList() {
+        for (int i = 0; i < computers.size(); i++) {
+            Computer c = computers.get(i);
 
+            System.out.println("Serial: " + c.getSerialNumber());
+            System.out.println("Piso: " + c.getFloor());
+            System.out.println("Columna: " + c.getColumn());
+            System.out.println("Incidentes: " + c.getTotalIncidents());
+            System.out.println("--------------------");
+        }
     }
 
+    public Computer getComputerWithMoreIncidents() {
+        if (computers.size() == 0) {
+            return null; 
+        }
+
+        Computer mayor = computers.get(0);
+        for (int i = 1; i < computers.size(); i++) {
+            Computer c = computers.get(i);
+            if (c.getTotalIncidents() > mayor.getTotalIncidents()) {
+                mayor = c;
+            }
+        }
+        return mayor;
+    }
 }
